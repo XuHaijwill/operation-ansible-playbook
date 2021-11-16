@@ -1,0 +1,12 @@
+---
+- name: play 1
+  hosts: localhost
+  gather_facts: true
+  tasks: 
+    - name: task1 in play1
+      debug: 
+        msg: "output task1 in play1"
+
+    - name: task2 in play1
+      debug: 
+        msg: "output task2 in play1"
