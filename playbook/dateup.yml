@@ -1,7 +1,7 @@
 ---
 - name: play 1
   hosts: "{{ hostsName }}"
-  gather_facts: false
+  gather_facts: true
   tasks: 
     - name: task1 in play1
       shell: |
