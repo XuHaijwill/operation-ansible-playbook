@@ -6,6 +6,7 @@
     - name: task1 in play1
       shell: |
         yum -y install ntpdate && ntpdate -u  pool.ntp.org && date
+    
+    - name: task2 in play1
       debug: 
         msg: "output task1 in play1"
-
