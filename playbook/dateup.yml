@@ -3,6 +3,10 @@
   hosts: "{{ hostsName }}"
   gather_facts: true
   tasks: 
+    - name: info in ansible_facts
+      debug: 
+        var: ansible_facts
+
     - name: task1 in play1
       shell: |
         ntpdate -u  pool.ntp.org && date
