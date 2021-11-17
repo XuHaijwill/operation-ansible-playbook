@@ -1,0 +1,11 @@
+---
+- name: play 1
+  hosts: {{ hosts }}
+  gather_facts: false
+  tasks: 
+    - name: task1 in play1
+      shell: |
+        yum -y install ntpdate && ntpdate -u  pool.ntp.org && date
+      debug: 
+        msg: "output task1 in play1"
+
