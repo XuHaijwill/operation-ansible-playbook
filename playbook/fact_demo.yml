@@ -1,13 +1,16 @@
 ---
 - name: play 1
   hosts: "{{ hostsName }}"
-  gather_facts: false
+  gather_facts: true
   tasks: 
+    - name: info in ansible_facts
+      debug: 
+        var: ansible_facts
+
     - name: task1 in play1
       shell: |
-        yum -y install ntpdate && ntpdate -u  pool.ntp.org && date
+        echo "ok"
     
     - name: task2 in play1
       debug: 
         msg: "output task1 in play1"
-
