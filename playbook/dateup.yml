@@ -1,6 +1,6 @@
 ---
 - name: play 1
-  hosts: {{ hosts }}
+  hosts: {{ hostsName }}
   gather_facts: false
   tasks: 
     - name: task1 in play1
