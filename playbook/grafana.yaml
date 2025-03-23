@@ -1,0 +1,46 @@
+---
+- name: node exporter
+  hosts: "{{ hosts }}"
+  gather_facts: false
+  tasks:
+    - name: msg
+      debug:
+        msg: "output msg {{ ansible_host }}"
+
+    - name: kill node_exporter
+      shell: |
+        ps -ef | grep node_exporter | grep -v grep | awk '{print $2}' | xargs kill -9
+
+    - name: start node_exporter
+      shell: |
+        cd /opt/node_exporter-1.9.0.linux-amd64 && nohup ./node_exporter --web.listen-address=:39100 >/dev/null 2>&1 &
+
+    - name: check node_exporter
+      shell: |
+        ps -ef|grep node_exporter
+
+    - name: kill prometheus
+      shell: |
+        ps -ef | grep prometheus | grep -v grep | awk '{print $2}' | xargs kill -9
+
+    - name: start prometheus
+      shell: |
+        cd /opt/prometheus-2.53.4.linux-amd64 && nohup ./prometheus >/dev/null 2>&1 &
+      when: ansible_host == '192.168.60.134'
+
+    - name: check prometheus
+      shell: |
+        ps -ef|grep prometheus
+
+    - name: kill grafana
+      shell: |
+        ps -ef | grep grafana | grep -v grep | awk '{print $2}' | xargs kill -9
+
+    - name: start grafana
+      shell: |
+        cd /opt/grafana-v11.5.2/bin && nohup ./grafana server >/dev/null 2>&1 &
+      when: ansible_host == '192.168.60.134'
+
+    - name: check grafana
+      shell: |
+        ps -ef|grep grafana
