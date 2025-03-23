@@ -7,10 +7,6 @@
       debug:
         msg: "output msg {{ ansible_host }}"
 
-    - name: kill node_exporter
-      shell: |
-        kill -9 $(ps -ef | grep node_exporter | grep -v grep | awk '{print $2}')
-
     - name: start node_exporter
       shell: |
         cd /opt/node_exporter-1.9.0.linux-amd64 && nohup ./node_exporter --web.listen-address=:39100 >/dev/null 2>&1 &
