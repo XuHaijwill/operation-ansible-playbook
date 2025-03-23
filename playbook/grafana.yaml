@@ -9,7 +9,7 @@
 
     - name: kill node_exporter
       shell: |
-        ps -ef | grep node_exporter | grep -v grep | awk '{print $2}' | xargs kill -9
+        ps -ef |grep node_exporter |awk '{print $2}' |xargs kill
       ignore_errors: true
 
     - name: start node_exporter
@@ -22,7 +22,7 @@
 
     - name: kill prometheus
       shell: |
-        ps -ef | grep prometheus | grep -v grep | awk '{print $2}' | xargs kill -9
+        ps -ef |grep prometheus |awk '{print $2}' |xargs kill
       ignore_errors: true
 
     - name: start prometheus
@@ -36,7 +36,7 @@
 
     - name: kill grafana
       shell: |
-        ps -ef | grep grafana | grep -v grep | awk '{print $2}' | xargs kill -9
+        ps -ef |grep grafana |awk '{print $2}' |xargs kill
       ignore_errors: true
 
     - name: start grafana
