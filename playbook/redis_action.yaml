@@ -1,0 +1,43 @@
+---
+# ansible-playbook node_exporter.yaml --extra-vars "{'hostsName':'192.168.60.135'}" --verbose
+# ansible-playbook node_exporter.yaml --extra-vars "hostsName=192.168.60.135" --verbose
+- name: node exporter
+  hosts: "{{ hostsName }}"
+  gather_facts: false
+  tasks:
+    - name: Check if Redis image exists
+      shell: |
+        docker images --filter "reference=redis" --format "{{.Repository}}:{{.Tag}}"
+      register: redis_image_status
+      ignore_errors: true
+
+    - name: Debug Redis image status
+      debug:
+        msg: >
+          Redis image is {{ 'available' if redis_image_status.stdout != '' else 'not available' }}
+
+    - name: docker pull redis
+      shell: |
+        docker pull redis
+      when: redis_image_status.stdout == ''
+
+    - name: Check if Redis container is running
+      shell: |
+        docker ps --filter "name=redis" --filter "status=running" --format "{{.Names}}"
+      register: redis_status
+      ignore_errors: true
+
+    - name: Debug Redis container status
+      debug:
+        msg: >
+          Redis container is {{ 'running' if redis_status.stdout != '' else 'not running' }}
+
+    - name: Pull and run Redis container if not running
+      shell: |
+        docker run -itd --name redisNew -p 6379:6379 redis:latest --requirepass '123456'
+      when: redis_status.stdout == ''
+
+    - name: Set Redis container to start on boot
+      shell: |
+        docker update --restart=always redisNew
+      when: redis_status.stdout != ''
