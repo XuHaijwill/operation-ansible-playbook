@@ -1,0 +1,34 @@
+---
+- name: node exporter
+  hosts: "{{ hosts }}"
+  gather_facts: false
+  tasks:
+    - name: msg
+      debug:
+        msg: "output msg {{ ansible_host }}"
+
+    - name: download jdk
+      shell: |
+        # curl https://cdn.azul.com/zulu/bin/zulu21.42.19-ca-jdk21.0.7-linux_x64.zip
+        cd /opt
+        curl -O https://cdn.azul.com/zulu/bin/zulu21.42.19-ca-jdk21.0.7-linux_x64.zip
+        unzip zulu21.42.19-ca-jdk21.0.7-linux_x64.zip
+
+    - name: check if JDK folder exists
+      ansible.builtin.stat:
+        path: /opt/zulu21.42.19-ca-jdk21.0.7-linux_x64
+      register: jdk_folder_status
+
+    - name: verify JDK unzip success
+      fail:
+        msg: "JDK unzip failed. Folder /opt/zulu21.42.19-ca-jdk21.0.7-linux_x64 does not exist."
+      when: not jdk_folder_status.stat.exists
+
+    - name: set jdk class path
+      shell: |
+        echo "export JAVA_HOME=/opt/zulu21.42.19-ca-jdk21.0.7-linux_x64" >> /etc/profile 
+        echo "export JRE_HOME=${JAVA_HOME}/jre" >> /etc/profile 
+        echo "export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib" >> /etc/profile 
+        echo "export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin" >> /etc/profile 
+        echo "export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib" >> /etc/profile 
+        source /etc/profile
