@@ -7,10 +7,28 @@
       debug: 
         var: ansible_facts
 
-    - name: task1 in play1
+    - name: update date centos7
       shell: |
         ntpdate -u  pool.ntp.org && date
-    
-    - name: task2 in play1
+      when: ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version'] == "7"
+
+    - name: Check chronyd service status
+      shell: |
+        ps -ef | grep chronyd
+      register: chronyd_process
+      ignore_errors: true
+
+    - name: Debug chronyd process status
+      debug:
+        msg: >
+          chronyd process is {{ 'running' if chronyd_process.stdout != '' else 'not running' }}
+
+    - name: update date centos8
+      shell: |
+        yum install -y chrony
+        systemctl status chronyd
+      when: ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version'] == "8"
+
+    - name: msg output
       debug: 
         msg: "output task1 in play1"
