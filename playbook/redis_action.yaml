@@ -34,10 +34,16 @@
 
     - name: Pull and run Redis container if not running
       shell: |
-        docker run -itd --name redisNew -p 6379:6379 redis:latest --requirepass '123456'
+        # https://blog.csdn.net/chenthe1/article/details/129470539
+        # -p 6379:6379 端口映射：前表示主机部分，：后表示容器部分。
+        # -log 日志相关
+        # --name redis 指定该容器名称，查看和进行操作都比较方便。
+        # -v 挂载文件或目录 ：前表示主机部分（必须为绝对路径），：后表示容器部分。
+        # /opt/myredis/redis.conf:/etc/redis/redis.conf 挂载我的配置文件
+        # /opt/myredis/data:/data 挂载redis的数据路径
+        # -d redis 表示后台启动redis
+        # redis-server /etc/redis/redis.conf 指定配置文件的路径。/etc/redis/redis.conf指的是容器内的文件路径，对应的宿主机的路径要根据挂载卷的路径找到。我的宿主机路径就是/opt/myredis/redis.conf
+        # –appendonly yes 开启redis 持久化
+        # –requirepass 123456 设置密码为123456
+        docker run --restart=always --log-opt max-size=100m --log-opt max-file=2 -p 6379:6379 --name myredis -v /opt/myredis/redis.conf:/etc/redis/redis.conf -v /opt/myredis/data:/data -d redis redis-server /etc/redis/redis.conf --appendonly yes --requirepass 123456
       when: redis_status.stdout == ''
-
-    - name: Set Redis container to start on boot
-      shell: |
-        docker update --restart=always redisNew
-      when: redis_status.stdout != ''
