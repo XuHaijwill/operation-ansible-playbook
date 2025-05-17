@@ -7,7 +7,7 @@
   tasks:
     - name: Check if Redis image exists
       shell: |
-        docker images --filter "reference=redis" --format "{{.Repository}}:{{.Tag}}"
+        {% raw %}docker images --filter "reference=redis" --format "{{.Repository}}:{{.Tag}}"{% endraw %}
       register: redis_image_status
       ignore_errors: true
 
