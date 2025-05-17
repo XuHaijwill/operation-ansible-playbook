@@ -1,6 +1,6 @@
 ---
 - name: node exporter
-  hosts: "{{ hosts }}"
+  hosts: "{{ hostsName }}"
   gather_facts: false
   tasks:
     - name: msg
