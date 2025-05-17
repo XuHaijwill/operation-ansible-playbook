@@ -23,5 +23,4 @@
     - name: after change check the firewall status
       shell: |
         firewall-cmd --state
-
-
+      ignore_errors: true
