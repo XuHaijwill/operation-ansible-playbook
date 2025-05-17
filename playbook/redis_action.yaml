@@ -1,6 +1,6 @@
 ---
-# ansible-playbook node_exporter.yaml --extra-vars "{'hostsName':'192.168.60.135'}" --verbose
-# ansible-playbook node_exporter.yaml --extra-vars "hostsName=192.168.60.135" --verbose
+# ansible-playbook redis_action.yaml --extra-vars "{'hostsName':'192.168.60.134'}" --verbose
+# ansible-playbook redis_action.yaml --extra-vars "hostsName=192.168.60.134" --verbose
 - name: node exporter
   hosts: "{{ hostsName }}"
   gather_facts: false
