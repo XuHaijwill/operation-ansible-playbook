@@ -1,4 +1,6 @@
 ---
+# ansible-playbook node_exporter.yaml --extra-vars "{'hostsName':'192.168.60.135'}" --verbose
+# ansible-playbook node_exporter.yaml --extra-vars "hostsName=192.168.60.135" --verbose
 - name: node exporter
   hosts: "{{ hostsName }}"
   gather_facts: false
@@ -19,7 +21,7 @@
           {{ 'exists' if folder_status.stat.exists else 'does not exist' }}
 
     - name: download node_exporter
-      shell:
+      shell: |
         cd /opt
         wget https://github.com/prometheus/node_exporter/releases/download/v1.9.0/node_exporter-1.9.0.linux-amd64.tar.gz
         tar -zxvf node_exporter-1.9.0.linux-amd64.tar.gz
