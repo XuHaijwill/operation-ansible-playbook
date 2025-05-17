@@ -1,0 +1,27 @@
+---
+# ansible-playbook centos8_firewall_action.yaml --extra-vars "{'hostsName':'192.168.60.135'}" --verbose
+# ansible-playbook centos8_firewall_action.yaml --extra-vars "hostsName=192.168.60.135" --verbose
+- name: node exporter
+  hosts: "{{ hostsName }}"
+  gather_facts: false
+  tasks:
+    - name: task1 in play1
+      debug:
+        msg: "output task1 in play1"
+
+    - name: check the firewall status
+      shell: |
+        firewall-cmd --state
+      register: firewall_status
+      ignore_errors: true
+
+    - name: Stop and disable firewall if running
+      shell: |
+        systemctl stop firewalld && systemctl disable firewalld
+      when: firewall_status.stdout == 'running'
+
+    - name: after change check the firewall status
+      shell: |
+        firewall-cmd --state
+
+
