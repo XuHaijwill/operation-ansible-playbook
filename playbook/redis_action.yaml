@@ -23,7 +23,7 @@
 
     - name: Check if Redis container is running
       shell: |
-        docker ps --filter "name=redis" --filter "status=running" --format "{{.Names}}"
+        {% raw %}docker ps --filter "name=redis" --filter "status=running" --format "{{.Names}}"{% endraw %}
       register: redis_status
       ignore_errors: true
 
