@@ -1,5 +1,5 @@
 ---
-# ansible-playbook server_init.yaml --extra-vars "{'hostsName': ['192.168.0.27'，‘192.168.0.25’，‘192.168.0.243’]}" --verbose
+# ansible-playbook server_init.yaml --extra-vars "{'hostsName': ['192.168.0.27','192.168.0.25','192.168.0.243']}" --verbose
 # ansible-playbook hostname_action.yaml --extra-vars "hostsName=192.168.60.135" --verbose
 - name: server_init
   hosts: "{{ hostsName }}"
@@ -14,9 +14,9 @@
         cd /opt/my_app/prometheus-2.53.4.linux-amd64 && nohup ./prometheus >/dev/null 2>&1 &
         cd /opt/my_app/node_exporter-1.9.0.linux-amd64 && nohup ./node_exporter --web.listen-address=:39100 >/dev/null 2>&1 &
         cd /opt/my_app/prometheus-2.53.4.linux-amd64 && nohup ./prometheus >/dev/null 2>&1 &
-      when: hostname == "xhj_web1"
+      when: inventory_hostname == "xhj_web1"
 
     - name: xhj_db1 and xhj_app1 init
       shell: |
         cd /opt/my_app/node_exporter-1.9.0.linux-amd64 && nohup ./node_exporter --web.listen-address=:39100 >/dev/null 2>&1 &
-      when: hostname == "xhj_db1" or hostname == "xhj_app1"
+      when: inventory_hostname in ["xhj_db1", "xhj_app1"]
