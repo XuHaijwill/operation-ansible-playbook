@@ -1,6 +1,6 @@
 ---
-# ansible-playbook docker_install.yaml --extra-vars "{'hostsName': ['192.168.0.25']}" --verbose
-# ansible-playbook docker_install.yaml --extra-vars "hostsName=192.168.0.25" --verbose
+# ansible-playbook docker_mysql_5.7_install.yaml --extra-vars "{'hostsName': ['192.168.0.25']}" --verbose
+# ansible-playbook docker_mysql_5.7_install.yaml --extra-vars "hostsName=192.168.0.25" --verbose
 - name: docker_install
   hosts: "{{ hostsName }}"
   gather_facts: true
@@ -14,6 +14,21 @@
         mkdir -p /mydata/mysql/log
         mkdir -p /mydata/mysql/data
         mkdir -p /mydata/mysql/conf
+
+    - name: daemon.json change
+      shell: |
+        cat /etc/docker/daemon.json
+        echo '
+        {
+          "registry-mirrors": [
+            "https://docker.1ms.run",
+            "https://func.ink",
+            "https://docker.zhai.cm/"
+          ]
+        }
+        ' > /etc/docker/daemon.json
+        systemctl daemon-reload
+        systemctl restart docker
 
     - name: docker pull 5.7
       shell: |
