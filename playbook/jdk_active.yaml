@@ -14,7 +14,7 @@
         cd ~
         echo 'export JAVA_HOME=/opt/runtime/zulu8' > java8.sh
         echo 'export PATH=$JAVA_HOME/bin:$PATH' >> java8.sh
-        echo 'export 'JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"' >> java8.sh
+        echo 'export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"' >> java8.sh
         chmod 755 ~/java8.sh
         source ~/java8.sh
       # when: active_jdk == 'jdk8'
