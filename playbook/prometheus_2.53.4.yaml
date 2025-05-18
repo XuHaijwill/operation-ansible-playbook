@@ -36,7 +36,7 @@
 
     - name: start Prometheus
       shell: |
-        cd /opt/my_app/prometheus-2.53.4.linux-amd64 && nohup ./prometheus >/dev/null 2>&1 &
+        cd /opt/my_apps/prometheus-2.53.4.linux-amd64 && nohup ./prometheus >/dev/null 2>&1 &
       when: prometheus_process.stdout == ''
 
     - name: check Prometheus process
