@@ -1,0 +1,44 @@
+---
+# ansible-playbook node_exporter_1.9.0.yaml --extra-vars "{'hostsName':'192.168.60.135'}" --verbose
+# ansible-playbook node_exporter_1.9.0.yaml --extra-vars "hostsName=192.168.60.135" --verbose
+- name: node exporter
+  hosts: "{{ hostsName }}"
+  gather_facts: false
+  tasks:
+    - name: msg
+      debug:
+        msg: "output msg {{ ansible_host }}"
+
+    - name: Check if folder exists
+      stat:
+        path: /opt/my_apps/node_exporter-1.9.0.linux-amd64
+      register: folder_status
+
+    - name: Debug folder status
+      debug:
+        msg: >
+          Folder {{ '/opt/node_exporter-1.9.0.linux-amd64' }} 
+          {{ 'exists' if folder_status.stat.exists else 'does not exist' }}
+
+    - name: download node_exporter
+      shell: |
+        cd /opt/my_apps
+        wget https://github.com/prometheus/node_exporter/releases/download/v1.9.0/node_exporter-1.9.0.linux-amd64.tar.gz
+        tar -zxvf node_exporter-1.9.0.linux-amd64.tar.gz
+        ls -l
+      when: not folder_status.stat.exists
+
+    - name: Check node_exporter process
+      shell: |
+        ps -ef | grep node_exporter | grep -v grep
+      register: node_exporter_process
+      ignore_errors: true
+
+    - name: start node_exporter
+      shell: |
+        cd /opt/my_apps/node_exporter-1.9.0.linux-amd64 && nohup ./node_exporter --web.listen-address=:39100 >/dev/null 2>&1 &
+      when: node_exporter_process.stdout == ''
+
+    - name: check node_exporter
+      shell: |
+        ps -ef|grep node_exporter
