@@ -17,7 +17,7 @@
     - name: Debug folder status
       debug:
         msg: >
-          Folder {{ '/opt/node_exporter-1.9.0.linux-amd64' }} 
+          Folder {{ '/opt/my_apps/node_exporter-1.9.0.linux-amd64' }} 
           {{ 'exists' if folder_status.stat.exists else 'does not exist' }}
 
     - name: download node_exporter
