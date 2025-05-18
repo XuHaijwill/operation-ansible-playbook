@@ -1,5 +1,5 @@
 ---
-# ansible-playbook centos8_firewall_action.yaml --extra-vars "{'hostsName':'192.168.60.135'}" --verbose
+# ansible-playbook centos8_firewall_action.yaml --extra-vars "{'hostsName': ['192.168.0.27','192.168.0.25','192.168.0.243']}" --verbose
 # ansible-playbook centos8_firewall_action.yaml --extra-vars "hostsName=192.168.60.135" --verbose
 - name: node exporter
   hosts: "{{ hostsName }}"
