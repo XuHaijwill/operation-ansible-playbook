@@ -11,7 +11,7 @@
 
     - name: Check if folder exists
       stat:
-        path: /opt/node_exporter-1.9.0.linux-amd64
+        path: /opt/my_app/node_exporter-1.9.0.linux-amd64
       register: folder_status
 
     - name: Debug folder status
@@ -36,7 +36,7 @@
 
     - name: start node_exporter
       shell: |
-        cd /opt/node_exporter-1.9.0.linux-amd64 && nohup ./node_exporter --web.listen-address=:39100 >/dev/null 2>&1 &
+        cd /opt/my_app/node_exporter-1.9.0.linux-amd64 && nohup ./node_exporter --web.listen-address=:39100 >/dev/null 2>&1 &
       when: node_exporter_process.stdout == ''
 
     - name: check node_exporter

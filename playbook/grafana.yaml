@@ -1,49 +1,41 @@
 ---
+# ansible-playbook node_exporter.yaml --extra-vars "{'hostsName':'192.168.60.135'}" --verbose
+# ansible-playbook node_exporter.yaml --extra-vars "hostsName=192.168.60.135" --verbose
 - name: node exporter
-  hosts: "{{ hosts }}"
+  hosts: "{{ hostsName }}"
   gather_facts: false
   tasks:
-    - name: msg
+    - name: Check if Grafana folder exists
+      stat:
+        path: /opt/my_app/grafana-11.5.2.linux-amd64
+      register: grafana_folder_status
+
+    - name: Debug Grafana folder status
       debug:
-        msg: "output msg {{ ansible_host }}"
+        msg: >
+          Folder {{ '/opt/my_app/grafana-11.5.2.linux-amd64' }}
+          {{ 'exists' if grafana_folder_status.stat.exists else 'does not exist' }}
 
-    - name: kill node_exporter
+    - name: Download and extract Grafana
       shell: |
-        ps -ef | grep node_exporter | grep -v grep | awk '{print $2}' | xargs kill -9
-      ignore_errors: true
+        cd /opt/my_app
+        wget https://dl.grafana.com/oss/release/grafana-11.5.2.linux-amd64.tar.gz
+        tar -zxvf grafana-11.5.2.linux-amd64.tar.gz
+        mv grafana-11.5.2.linux-amd64  grafana-v11.5.2
+        ls -l
+      when: not grafana_folder_status.stat.exists
 
-    - name: start node_exporter
+    - name: Check grafana process
       shell: |
-        cd /opt/node_exporter-1.9.0.linux-amd64 && nohup ./node_exporter --web.listen-address=:39100 >/dev/null 2>&1 &
-
-    - name: check node_exporter
-      shell: |
-        ps -ef|grep node_exporter
-
-    - name: kill prometheus
-      shell: |
-        ps -ef | grep prometheus | grep -v grep | awk '{print $2}' | xargs kill -9
-      ignore_errors: true
-
-    - name: start prometheus
-      shell: |
-        cd /opt/prometheus-2.53.4.linux-amd64 && nohup ./prometheus >/dev/null 2>&1 &
-      when: ansible_host == '192.168.60.134'
-
-    - name: check prometheus
-      shell: |
-        ps -ef|grep prometheus
-
-    - name: kill grafana
-      shell: |
-        ps -ef | grep grafana | grep -v grep | awk '{print $2}' | xargs kill -9
+        ps -ef | grep grafana | grep -v grep
+      register: grafana_process
       ignore_errors: true
 
     - name: start grafana
       shell: |
         cd /opt/grafana-v11.5.2/bin && nohup ./grafana server >/dev/null 2>&1 &
-      when: ansible_host == '192.168.60.134'
+      when: node_exporter_process.stdout == ''
 
-    - name: check grafana
+    - name: check node_exporter
       shell: |
-        ps -ef|grep grafana
+        ps -ef|grep node_exporter
