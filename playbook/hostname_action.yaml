@@ -1,5 +1,5 @@
 ---
-# ansible-playbook hostname_action.yaml --extra-vars "{'hostsName': ['192.168.0.243','192.168.0.27'], 'set_name': 'xhj_web1'}" --verbose
+# ansible-playbook hostname_action.yaml --extra-vars "{'hostsName': ['192.168.0.27'], 'set_name': 'xhj_web1'}" --verbose
 # ansible-playbook hostname_action.yaml --extra-vars "hostsName=192.168.60.135" --verbose
 - name: hostname_action
   hosts: "{{ hostsName }}"
