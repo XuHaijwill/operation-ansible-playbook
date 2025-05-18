@@ -11,12 +11,12 @@
 
     - name: xhj_web1 init
       shell: |
-        cd /opt/my_app/prometheus-2.53.4.linux-amd64 && nohup ./prometheus >/dev/null 2>&1 &
-        cd /opt/my_app/node_exporter-1.9.0.linux-amd64 && nohup ./node_exporter --web.listen-address=:39100 >/dev/null 2>&1 &
-        cd /opt/my_app/prometheus-2.53.4.linux-amd64 && nohup ./prometheus >/dev/null 2>&1 &
+        cd /opt/my_apps/prometheus-2.53.4.linux-amd64 && nohup ./prometheus >/dev/null 2>&1 &
+        cd /opt/my_apps/node_exporter-1.9.0.linux-amd64 && nohup ./node_exporter --web.listen-address=:39100 >/dev/null 2>&1 &
+        cd /opt/my_apps/prometheus-2.53.4.linux-amd64 && nohup ./prometheus >/dev/null 2>&1 &
       when: ansible_host == "192.168.0.27"
 
     - name: xhj_db1 and xhj_app1 init
       shell: |
-        cd /opt/my_app/node_exporter-1.9.0.linux-amd64 && nohup ./node_exporter --web.listen-address=:39100 >/dev/null 2>&1 &
+        cd /opt/my_apps/node_exporter-1.9.0.linux-amd64 && nohup ./node_exporter --web.listen-address=:39100 >/dev/null 2>&1 &
       when: ansible_host in ["192.168.0.25", "192.168.0.243"]
