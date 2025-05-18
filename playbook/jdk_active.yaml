@@ -1,6 +1,6 @@
 ---
-# ansible-playbook node_exporter_1.9.0.yaml --extra-vars "{'hostsName': ['192.168.0.243','192.168.0.25']}" --verbose
-# ansible-playbook node_exporter_1.9.0.yaml --extra-vars "hostsName=192.168.60.135" --verbose
+# ansible-playbook jdk_active.yaml --extra-vars "{'hostsName': ['192.168.0.243','192.168.0.27']}" --verbose
+# ansible-playbook jdk_active.yaml --extra-vars "hostsName=192.168.60.135" --verbose
 - name: node exporter
   hosts: "{{ hostsName }}"
   gather_facts: false
@@ -15,6 +15,7 @@
         export JAVA_HOME=/opt/runtime/zulu8 > java8.sh
         export PATH=$JAVA_HOME/bin:$PATH >> java8.sh
         export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8" >> java8.sh
+        chmod 755 ~/java8.sh
         source ~/java8.sh
       # when: active_jdk == 'jdk8'
 
@@ -25,6 +26,7 @@
         export PATH=$JAVA_HOME/bin:$PATH >> java17.sh
         export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8" >> java17.sh
         source  ~/java17.sh
+        chmod 755 ~/java17.sh
       # when: active_jdk == 'jdk17'
 
     - name: jdk21
@@ -34,4 +36,5 @@
         export PATH=$JAVA_HOME/bin:$PATH >> java21.sh
         export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8" >> java21.sh
         source  ~/java21.sh
+        chmod 755 ~/java21.sh
       # when: active_jdk == 'jdk21'
