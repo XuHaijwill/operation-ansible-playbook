@@ -1,13 +1,13 @@
 ---
-# ansible-playbook node_exporter.yaml --extra-vars "{'hostsName':'192.168.60.135'}" --verbose
-# ansible-playbook node_exporter.yaml --extra-vars "hostsName=192.168.60.135" --verbose
+# ansible-playbook grafana.yaml --extra-vars "{'hostsName':'192.168.0.27'}" --verbose
+# ansible-playbook grafana.yaml --extra-vars "hostsName=192.168.0.27" --verbose
 - name: node exporter
   hosts: "{{ hostsName }}"
   gather_facts: false
   tasks:
     - name: Check if Grafana folder exists
       stat:
-        path: /opt/my_app/grafana-11.5.2.linux-amd64
+        path: /opt/my_apps/grafana-11.5.2.linux-amd64
       register: grafana_folder_status
 
     - name: Debug Grafana folder status
@@ -18,7 +18,7 @@
 
     - name: Download and extract Grafana
       shell: |
-        cd /opt/my_app
+        cd /opt/my_apps
         wget https://dl.grafana.com/oss/release/grafana-11.5.2.linux-amd64.tar.gz
         tar -zxvf grafana-11.5.2.linux-amd64.tar.gz
         mv grafana-11.5.2.linux-amd64  grafana-v11.5.2
@@ -33,7 +33,7 @@
 
     - name: start grafana
       shell: |
-        cd /opt/grafana-v11.5.2/bin && nohup ./grafana server >/dev/null 2>&1 &
+        cd /opt/my_apps/grafana-v11.5.2/bin && nohup ./grafana server >/dev/null 2>&1 &
       when: node_exporter_process.stdout == ''
 
     - name: check node_exporter
