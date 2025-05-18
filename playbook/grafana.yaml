@@ -7,13 +7,13 @@
   tasks:
     - name: Check if Grafana folder exists
       stat:
-        path: /opt/my_apps/grafana-11.5.2.linux-amd64
+        path: /opt/my_apps/grafana-v11.5.2
       register: grafana_folder_status
 
     - name: Debug Grafana folder status
       debug:
         msg: >
-          Folder {{ '/opt/my_app/grafana-11.5.2.linux-amd64' }}
+          Folder {{ '/opt/my_app/grafana-v11.5.2' }}
           {{ 'exists' if grafana_folder_status.stat.exists else 'does not exist' }}
 
     - name: Download and extract Grafana
