@@ -12,9 +12,9 @@
     - name: jdk8
       shell: |
         cd ~
-        export JAVA_HOME=/opt/runtime/zulu8 > java8.sh
-        export PATH=$JAVA_HOME/bin:$PATH >> java8.sh
-        export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8" >> java8.sh
+        echo 'export JAVA_HOME=/opt/runtime/zulu8' > java8.sh
+        echo 'export PATH=$JAVA_HOME/bin:$PATH' >> java8.sh
+        export 'JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"' >> java8.sh
         chmod 755 ~/java8.sh
         source ~/java8.sh
       # when: active_jdk == 'jdk8'
@@ -22,9 +22,9 @@
     - name: jdk17
       shell: |
         cd ~
-        export JAVA_HOME=/opt/runtime/zulu17 > java17.sh
-        export PATH=$JAVA_HOME/bin:$PATH >> java17.sh
-        export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8" >> java17.sh
+         echo 'export JAVA_HOME=/opt/runtime/zulu17' > java17.sh
+         echo 'export PATH=$JAVA_HOME/bin:$PATH' >> java17.sh
+         echo 'export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"' >> java17.sh
         source  ~/java17.sh
         chmod 755 ~/java17.sh
       # when: active_jdk == 'jdk17'
@@ -32,9 +32,9 @@
     - name: jdk21
       shell: |
         cd ~
-        export JAVA_HOME=/opt/runtime/zulu21 > java21.sh
-        export PATH=$JAVA_HOME/bin:$PATH >> java21.sh
-        export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8" >> java21.sh
+         echo 'export JAVA_HOME=/opt/runtime/zulu21' > java21.sh
+         echo 'export PATH=$JAVA_HOME/bin:$PATH' >> java21.sh
+         echo 'export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"' >> java21.sh
         source  ~/java21.sh
         chmod 755 ~/java21.sh
       # when: active_jdk == 'jdk21'
