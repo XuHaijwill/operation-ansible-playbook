@@ -3,7 +3,7 @@
 # ansible-playbook docker_install.yaml --extra-vars "hostsName=192.168.0.25" --verbose
 - name: server_init
   hosts: "{{ hostsName }}"
-  gather_facts: false
+  gather_facts: true
   tasks:
     - name: msg
       debug:

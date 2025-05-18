@@ -1,5 +1,5 @@
 ---
-# ansible-playbook dateup.yaml --extra-vars "{'hostsName': ['192.168.0.243','192.168.0.25']}" --verbose
+# ansible-playbook dateup.yaml --extra-vars "{'hostsName': ['192.168.0.243','192.168.0.25','192.168.0.27']}" --verbose
 # ansible-playbook dateup.yaml --extra-vars "hostsName=192.168.60.135" --verbose
 - name: dateup
   hosts: "{{ hostsName }}"
