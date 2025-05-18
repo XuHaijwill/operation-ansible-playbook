@@ -1,0 +1,44 @@
+---
+# ansible-playbook prometheus_2.53.4.yaml --extra-vars "{'hostsName':'192.168.0.27'}" --verbose
+# ansible-playbook prometheus_2.53.4.yaml --extra-vars "hostsName=192.168.0.27" --verbose
+- name: prometheus_2.53.4
+  hosts: "{{ hostsName }}"
+  gather_facts: false
+  tasks:
+    - name: msg
+      debug:
+        msg: "output msg {{ ansible_host }}"
+
+    - name: Check if Prometheus folder exists
+      stat:
+        path: /opt/my_apps/prometheus-2.53.4.linux-amd64
+      register: prometheus_folder_status
+
+    - name: Debug Prometheus folder status
+      debug:
+        msg: >
+          Folder {{ '/opt/my_apps/prometheus-2.53.4.linux-amd64' }}
+          {{ 'exists' if prometheus_folder_status.stat.exists else 'does not exist' }}
+
+    - name: Download and extract Prometheus
+      shell: |
+        cd /opt/my_apps
+        wget https://github.com/prometheus/prometheus/releases/download/v2.53.4/prometheus-2.53.4.linux-amd64.tar.gz
+        tar -zxvf prometheus-2.53.4.linux-amd64.tar.gz
+        ls -l
+      when: not prometheus_folder_status.stat.exists
+
+    - name: Check Prometheus process
+      shell: |
+        ps -ef | grep prometheus | grep -v grep
+      register: prometheus_process
+      ignore_errors: true
+
+    - name: start Prometheus
+      shell: |
+        cd /opt/my_app/prometheus-2.53.4.linux-amd64 && nohup ./prometheus >/dev/null 2>&1 &
+      when: prometheus_process.stdout == ''
+
+    - name: check Prometheus process
+      shell: |
+        ps -ef|grep prometheus | grep -v grep
